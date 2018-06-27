@@ -1,15 +1,25 @@
 from multicorn import ForeignDataWrapper
+from kubernetes import client, config
+from datetime import datetime, timezone
 
+config.load_kube_config()
 
-class KubernetesDataWrapper(ForeignDataWrapper):
+class KubernetesForeignDataWrapper(ForeignDataWrapper):
 
     def __init__(self, options, columns):
-        super(KubernetesDataWrapper, self).__init__(options, columns)
+        super(KubernetesForeignDataWrapper, self).__init__(options, columns)
+        self.kube = client.CoreV1Api()
         self.columns = columns
 
     def execute(self, quals, columns):
-        for index in range(20):
-            line = {}
-            for column_name in self.columns:
-                line[column_name] = '%s %s' % (column_name, index)
+        result = self.kube.list_node(watch=False)
+        now = datetime.now(tz=timezone.utc)
+
+        for i in result.items:
+            line = {
+                'name': i.metadata.name,
+                'age': str(now - i.metadata.creation_timestamp),
+                'status': i.status.conditions[-1].type,
+                'version': i.status.node_info.kubelet_version
+            }
             yield line
