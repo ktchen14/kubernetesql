@@ -11,4 +11,10 @@ psql postgres <<< "SELECT * FROM pods;"
 echo "================== UPDATE =================="
 psql postgres <<< "SELECT * FROM deployments WHERE name = 'nginx-deployment';"
 psql postgres <<< "UPDATE deployments SET desired = 5 WHERE name = 'nginx-deployment';"
-psql postgres <<< "SELECT * FROM deployments WHERE name = 'nginx-deployment';;"
+psql postgres <<< "SELECT * FROM deployments WHERE name = 'nginx-deployment';"
+
+echo "================== DISPLAYING IMAGE NAMES ==================="
+psql postgres <<< "select * from pods where image_names @> ARRAY['nginx:1.7.9']::varchar[];"
+
+echo "================== DISPLAYING ANNOTATIONS ==================="
+psql postgres <<< "select name from deployments where annotations->>'owner' ='Sarah'"

@@ -51,6 +51,8 @@ CREATE FOREIGN TABLE pods (
     -- items.metadata.ownerReference.name (to get ReplicaSet)
       -- items.ownerReference.name (after getting ReplicaSet info to get deployment name)
     deployment_name character varying,
+    -- items.spec.containers[x] image
+    image_names character varying[],
     -- items.status.containerStatuses.ready == true -- numerator
      -- length( items.status.containerStatuses) -- denominator
     ready character varying,

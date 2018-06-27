@@ -4,6 +4,10 @@ import logging
 from kubernetes import client, config
 from datetime import datetime, timezone
 import json
+from os.path import expanduser
+import os
+
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = expanduser('~/workspace/kubernetesql/user.json')
 
 config.load_kube_config()
 
@@ -75,6 +79,7 @@ class KubePodDataWrapper(ForeignDataWrapper):
     def execute(self, quals, columns):
         result = self.kube.list_namespaced_pod('default', watch=False)
         now = datetime.now(tz=timezone.utc)
+
         for i in result.items:
             if i.metadata.owner_references is not None:
                 owner_reference_name = i.metadata.owner_references[0].name
@@ -99,6 +104,7 @@ class KubePodDataWrapper(ForeignDataWrapper):
                 'name': i.metadata.name,
                 'node_name': i.spec.node_name,
                 'deployment_name': deployment_name,
+                'image_names': [container.image for container in i.spec.containers],
                 'ready': str(ready) + '/' + str(container_count),
                 'status': i.status.phase,
                 'restarts': restarts,
