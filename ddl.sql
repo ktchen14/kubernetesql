@@ -2,7 +2,7 @@ DROP SERVER IF EXISTS k8s_wrapper CASCADE;
 
 CREATE SERVER k8s_wrapper FOREIGN DATA WRAPPER multicorn
 options (
-  wrapper 'kubernetesql.KubernetesDataWrapper'
+  wrapper 'kubernetesql.KubernetesForeignDataWrapper'
 );
 
 DROP FOREIGN TABLE IF EXISTS nodes;
