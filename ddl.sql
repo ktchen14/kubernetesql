@@ -13,12 +13,14 @@ DROP FOREIGN TABLE IF EXISTS nodes;
 CREATE FOREIGN TABLE nodes (
 -- items.metadata.name
     name character varying,
---    items.status
+--    items.status.addresses (where type == externalIP)
+	external_ip inet,
 --    status character varying,
     -- items.metadata.creationTimestamp
     age character varying,
 --    items.status.nodeInfo.kubeletVersion
     version character varying
+    -- items.
 ) server k8s_wrapper   options ( resource_type 'nodes');
 
 DROP FOREIGN TABLE IF EXISTS deployments;

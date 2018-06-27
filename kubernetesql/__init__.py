@@ -22,13 +22,16 @@ class KubeNodeDataWrapper(ForeignDataWrapper):
     def execute(self, quals, columns):
         result = self.kube.list_node(watch=False)
         now = datetime.now(tz=timezone.utc)
-
+        print(result)
         for i in result.items:
+            external_ips = [address.address for address in i.status.addresses if address.type == 'ExternalIP']
+            external_ip = external_ips[0] if len(external_ips) > 0 else None
             line = {
                 'name': i.metadata.name,
                 'age': str(now - i.metadata.creation_timestamp),
                 'status': i.status.conditions[-1].type,
-                'version': i.status.node_info.kubelet_version
+                'version': i.status.node_info.kubelet_version,
+                'external_ip': external_ip
             }
             yield line
 
