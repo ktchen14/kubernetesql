@@ -36,7 +36,7 @@ class KubeDeploymentDataWrapper(ForeignDataWrapper):
         self.kube = client.AppsV1beta1Api()
 
     def execute(self, quals, columns):
-        result = self.kube.list_deployment_for_all_namespaces(watch=False)
+        result = self.kube.list_namespaced_deployment('default', watch=False)
         now = datetime.now(tz=timezone.utc)
         for i in result.items:
             line = {
