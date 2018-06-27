@@ -47,7 +47,7 @@ class KubeDeploymentDataWrapper(ForeignDataWrapper):
         for i in result.items:
             line = {
                 'name': i.metadata.name,
-                'desired': i.status.replicas,
+                'desired': i.spec.replicas,
                 'current_num': i.status.ready_replicas,
                 'up_to_date': i.status.updated_replicas,
                 'available': i.status.available_replicas,
@@ -56,7 +56,8 @@ class KubeDeploymentDataWrapper(ForeignDataWrapper):
             yield line
 
     def update(self, name, new_values):
-        log_to_postgres('OLD: %s\nNEW: %s' % (new_values), logging.DEBUG)
+        desired = new_values['desired']
+        result = self.kube.patch_namespaced_deployment(name, 'default', { 'spec': { 'replicas': desired }})
         return new_values
 
 class KubePodDataWrapper(ForeignDataWrapper):

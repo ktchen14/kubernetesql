@@ -53,4 +53,4 @@ CREATE FOREIGN TABLE pods (
 ) server k8s_wrapper options (resource_type 'pods');
 
 
-UPDATE deployments set desired = 3 where name = 'nginx-deployment';
+-- UPDATE deployments set desired = 3 where name = 'nginx-deployment';

@@ -2,7 +2,9 @@
 
 import kubernetesql
 
-print('====== TESTING NODES ======')
+print('*********** TESTING EXECUTION ***********')
+
+print('\n====== TESTING NODES ======')
 wrapper = kubernetesql.initialize_fdw({
     'resource_type': 'nodes',
 }, {})
@@ -24,3 +26,11 @@ wrapper = kubernetesql.initialize_fdw({
 }, {})
 for line in wrapper.execute(None, None):
 	print(line)
+
+
+print('\n\n\n*********** TESTING UPDATE ***********')
+print('\n====== TESTING DEPLOYMENTS ======')
+wrapper = kubernetesql.initialize_fdw({
+    'resource_type': 'deployments',
+}, {})
+wrapper.update('nginx-deployment', { 'name': 'nginx-deployment', 'desired': 4})
