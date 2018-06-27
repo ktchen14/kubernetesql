@@ -11,7 +11,7 @@ CREATE FOREIGN TABLE nodes (
 -- items.metadata.name
     name character varying,
 --    items.status
-    status character varying,
+--    status character varying,
     -- items.metadata.creationTimestamp
     age character varying,
 --    items.status.nodeInfo.kubeletVersion
