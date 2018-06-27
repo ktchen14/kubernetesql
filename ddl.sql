@@ -20,7 +20,6 @@ CREATE FOREIGN TABLE nodes (
     age character varying,
 --    items.status.nodeInfo.kubeletVersion
     version character varying
-    -- items.
 ) server k8s_wrapper   options ( resource_type 'nodes');
 
 DROP FOREIGN TABLE IF EXISTS deployments;
@@ -47,6 +46,9 @@ CREATE FOREIGN TABLE pods (
     name character varying,
     -- items.spec.node_name
     node_name character varying,
+    -- items.metadata.ownerReference.name (to get ReplicaSet)
+      -- items.ownerReference.name (after getting ReplicaSet info to get deployment name)
+    deployment_name character varying,
     -- items.status.containerStatuses.ready == true -- numerator
      -- length( items.status.containerStatuses) -- denominator
     ready character varying,
