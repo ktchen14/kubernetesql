@@ -1,4 +1,6 @@
 from multicorn import ForeignDataWrapper
+from multicorn.utils import log_to_postgres
+import logging
 from kubernetes import client, config
 from datetime import datetime, timezone
 
@@ -35,6 +37,10 @@ class KubeDeploymentDataWrapper(ForeignDataWrapper):
         super(KubeDeploymentDataWrapper, self).__init__(*args)
         self.kube = client.AppsV1beta1Api()
 
+    @property
+    def rowid_column(self):
+        return 'name'
+
     def execute(self, quals, columns):
         result = self.kube.list_namespaced_deployment('default', watch=False)
         now = datetime.now(tz=timezone.utc)
@@ -48,6 +54,10 @@ class KubeDeploymentDataWrapper(ForeignDataWrapper):
                 'age': str(now - i.metadata.creation_timestamp)
             }
             yield line
+
+    def update(self, name, new_values):
+        log_to_postgres('OLD: %s\nNEW: %s' % (new_values), logging.DEBUG)
+        return new_values
 
 class KubePodDataWrapper(ForeignDataWrapper):
     def __init__(self, *args):

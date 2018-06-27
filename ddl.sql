@@ -1,3 +1,4 @@
+SET client_min_messages TO 'debug';
 DROP SERVER IF EXISTS k8s_wrapper CASCADE;
 
 CREATE SERVER k8s_wrapper FOREIGN DATA WRAPPER multicorn
@@ -50,3 +51,6 @@ CREATE FOREIGN TABLE pods (
     -- items.status.startTime
     age character varying
 ) server k8s_wrapper options (resource_type 'pods');
+
+
+UPDATE deployments set desired = 3 where name = 'nginx-deployment';
