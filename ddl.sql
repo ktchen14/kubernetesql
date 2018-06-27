@@ -8,6 +8,6 @@ options (
 DROP FOREIGN TABLE IF EXISTS nodes;
 
 CREATE FOREIGN TABLE nodes (
-    test character varying,
-    test2 character varying
+    name character varying
+--    test2 character varying
 ) server k8s_wrapper;
