@@ -24,5 +24,5 @@ CREATE TABLE cves (
 INSERT INTO cves VALUES
 ('CVE-2018-7000', 'A security issue in nginx', 'nginx:1.7.9'),
 ('CVE-2018-8000', 'A problem with apache', 'library/apache'),
-('CVE-2018-9000', 'Something bad with ubuntu', 'library/ubuntu')
+('CVE-2018-9000', 'Something bad with postgresql', 'postgres:9.3.23')
 ;
