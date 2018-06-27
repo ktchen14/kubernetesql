@@ -1,3 +1,5 @@
+DROP EXTENSION IF EXISTS multicorn;
+CREATE EXTENSION multicorn;
 SET client_min_messages TO 'debug';
 DROP SERVER IF EXISTS k8s_wrapper CASCADE;
 
