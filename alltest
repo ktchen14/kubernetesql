@@ -1,0 +1,5 @@
+#! /usr/bin/env bash
+
+python3 setup.py install -f
+psql postgres < ddl.sql
+psql postgres <<< "SELECT * FROM nodes;"

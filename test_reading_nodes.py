@@ -1,8 +1,10 @@
 #! /usr/bin/env python3
 
-from kubernetesql import KubernetesForeignDataWrapper as KFDW
+import kubernetesql
 
-wrapper = KFDW({}, {})
+wrapper = kubernetesql.initialize_fdw({
+    'resource_type': 'nodes'
+}, {})
 for line in wrapper.execute(None, None):
 	print(line)
 # assert list(wrapper.execute(None, None)) == [{'node_name': 'node1'}, {'node_name': 'node2'}]
