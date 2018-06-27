@@ -36,7 +36,9 @@ CREATE FOREIGN TABLE deployments (
 --    items.availableReplicas
     available int,
     -- items.metadata.creationTimestamp
-    age character varying
+    age character varying,
+    -- items. metadata.annotations
+    annotations jsonb
 ) server k8s_wrapper options (resource_type 'deployments');
 
 DROP FOREIGN TABLE IF EXISTS pods;

@@ -3,6 +3,7 @@ from multicorn.utils import log_to_postgres
 import logging
 from kubernetes import client, config
 from datetime import datetime, timezone
+import json
 
 config.load_kube_config()
 
@@ -55,7 +56,8 @@ class KubeDeploymentDataWrapper(ForeignDataWrapper):
                 'current_num': i.status.ready_replicas,
                 'up_to_date': i.status.updated_replicas,
                 'available': i.status.available_replicas,
-                'age': str(now - i.metadata.creation_timestamp)
+                'age': str(now - i.metadata.creation_timestamp),
+                'annotations': json.dumps(i.metadata.annotations)
             }
             yield line
 
