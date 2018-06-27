@@ -9,6 +9,8 @@ def initialize_fdw(options, columns):
         return KubeNodeDataWrapper(options, columns)
     elif options['resource_type'] == 'deployments':
         return KubeDeploymentDataWrapper(options,columns)
+    elif options['resource_type'] == 'pods':
+        return KubePodDataWrapper(options,columns)
 
 class KubeNodeDataWrapper(ForeignDataWrapper):
     def __init__(self, *args):
@@ -47,3 +49,29 @@ class KubeDeploymentDataWrapper(ForeignDataWrapper):
             }
             yield line
 
+class KubePodDataWrapper(ForeignDataWrapper):
+    def __init__(self, *args):
+        super(KubePodDataWrapper, self).__init__(*args)
+        self.kube = client.CoreV1Api()
+
+    def execute(self, quals, columns):
+        result = self.kube.list_namespaced_pod('default', watch=False)
+        now = datetime.now(tz=timezone.utc)
+
+        for i in result.items:
+            container_count = len(i.status.container_statuses)
+            ready = 0
+            restarts = 0
+            for j in i.status.container_statuses:
+                if j.ready:
+                    ready += 1
+                restarts += j.restart_count
+
+            line = {
+                'name': i.metadata.name,
+                'ready': str(ready) + '/' + str(container_count),
+                'status': i.status.phase,
+                'restarts': restarts,
+                'age': str(now - i.status.start_time)
+            }
+            yield line
