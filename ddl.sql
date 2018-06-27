@@ -18,6 +18,8 @@ CREATE FOREIGN TABLE nodes (
     version character varying
 ) server k8s_wrapper   options ( resource_type 'nodes');
 
+DROP FOREIGN TABLE IF EXISTS deployments;
+
 CREATE FOREIGN TABLE deployments (
 -- items.metadata.name
     name character varying,
@@ -32,3 +34,18 @@ CREATE FOREIGN TABLE deployments (
     -- items.metadata.creationTimestamp
     age character varying
 ) server k8s_wrapper options (resource_type 'deployments');
+
+DROP FOREIGN TABLE IF EXISTS pods;
+
+CREATE FOREIGN TABLE pods (
+-- items.metadata.name
+    name character varying,
+    -- items.status.conditions.type where type = Ready
+    ready character varying,
+    -- items.status.phase
+    status character varying,
+    -- items.status.containerStatuses.restartCount
+    restarts int,
+    -- items.status.startTime
+    age character varying
+) server k8s_wrapper options (resource_type 'pods');
