@@ -40,7 +40,8 @@ DROP FOREIGN TABLE IF EXISTS pods;
 CREATE FOREIGN TABLE pods (
 -- items.metadata.name
     name character varying,
-    -- items.status.conditions.type where type = Ready
+    -- items.status.containerStatuses.ready == true -- numerator
+     -- length( items.status.containerStatuses) -- denominator
     ready character varying,
     -- items.status.phase
     status character varying,
