@@ -80,6 +80,7 @@ class KubePodDataWrapper(ForeignDataWrapper):
 
             line = {
                 'name': i.metadata.name,
+                'node_name': i.spec.node_name,
                 'ready': str(ready) + '/' + str(container_count),
                 'status': i.status.phase,
                 'restarts': restarts,

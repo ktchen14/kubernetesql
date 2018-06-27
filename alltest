@@ -2,6 +2,13 @@
 
 python3 setup.py install -f
 psql postgres < ddl.sql
+
+echo "================== EXECUTE =================="
 psql postgres <<< "SELECT * FROM nodes;"
 psql postgres <<< "SELECT * FROM deployments;"
 psql postgres <<< "SELECT * FROM pods;"
+
+echo "================== UPDATE =================="
+psql postgres <<< "SELECT * FROM deployments WHERE name = 'nginx-deployment';"
+psql postgres <<< "UPDATE deployments SET desired = 5 WHERE name = 'nginx-deployment';"
+psql postgres <<< "SELECT * FROM deployments WHERE name = 'nginx-deployment';;"

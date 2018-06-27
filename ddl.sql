@@ -43,6 +43,8 @@ DROP FOREIGN TABLE IF EXISTS pods;
 CREATE FOREIGN TABLE pods (
 -- items.metadata.name
     name character varying,
+    -- items.spec.node_name
+    node_name character varying,
     -- items.status.containerStatuses.ready == true -- numerator
      -- length( items.status.containerStatuses) -- denominator
     ready character varying,
